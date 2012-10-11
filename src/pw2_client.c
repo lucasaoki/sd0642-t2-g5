@@ -26,38 +26,38 @@ pw2_query_prog_1(char *host)
 	}
 }
 
-void setJob(char *job, double *salary, int x) {
+void setJob(char *job, int *salary, int x) {
 	if (x < 30)
 	{
 		strcpy(job, "Faxineiro");
-		*salary = 800.00;
+		*salary = 800;
 	}
 	else if (x < 70)
 	{
 		strcpy(job, "Tecnico");
-		*salary = 1800.00;
+		*salary = 1800;
 		
 	}
 	else if (x < 95)
 	{
 		strcpy(job, "Engenheiro");
-		*salary = 6000.00;
+		*salary = 6000;
 	}
 	else {
 		strcpy(job, "Gerente");
-		*salary = 9000.00;
+		*salary = 9000;
 	}
 }
 
 void generateINSERT(char *machine, char *insert, int age, int x){
-	double salary;
+	int salary;
 	char job[20];
 	setJob(job, &salary, x);
-	sprintf(insert, "%s: INSERT INTO name(name,age,cargo,salario) VALUES('%s%d',%d,%s,%lf)", machine, machine, x, age, job, salary);	
+	sprintf(insert, "%s: INSERT INTO cadastrofunc(name,age,cargo,salario) VALUES('%s%d',%d,'%s',%d)\0", machine, machine, x, age, job, salary);	
 }
 
 void generateDELETE(char *machine, char *delete, int x){
-	sprintf(delete, "%s: DELETE FROM name WHERE name='%s%d'", machine, machine, x);
+	sprintf(delete, "%s: DELETE FROM cadastrofunc WHERE name='%s%d'\0", machine, machine, x);
 }
 
 void printSelect(double time, char *answer, int op){
