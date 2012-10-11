@@ -12,7 +12,7 @@
 CLIENT *clnt;
 
 #define SELECT_ALL "SELECT * FROM name"
-#define NUM_MAX_OPERATIONS 5
+#define NUM_MAX_OPERATIONS 300
 
 void
 pw2_query_prog_1(char *host)
@@ -26,12 +26,38 @@ pw2_query_prog_1(char *host)
 	}
 }
 
-void generateINSERT(char *machine, char *insert, int age){
-	sprintf(insert, "%s: INSERT INTO name(name,age) VALUES('%s%d',%d)", machine, machine, age, age);	
+void setJob(char *job, double *salary, int x) {
+	if (x < 30)
+	{
+		strcpy(job, "Faxineiro");
+		*salary = 800.00;
+	}
+	else if (x < 70)
+	{
+		strcpy(job, "Tecnico");
+		*salary = 1800.00;
+		
+	}
+	else if (x < 95)
+	{
+		strcpy(job, "Engenheiro");
+		*salary = 6000.00;
+	}
+	else {
+		strcpy(job, "Gerente");
+		*salary = 9000.00;
+	}
 }
 
-void generateDELETE(char *machine, char *delete, int age){
-	sprintf(delete, "%s: DELETE FROM name WHERE name='%s%d'", machine, machine, age);
+void generateINSERT(char *machine, char *insert, int age, int x){
+	double salary;
+	char job[20];
+	setJob(job, &salary, x);
+	sprintf(insert, "%s: INSERT INTO name(name,age,cargo,salario) VALUES('%s%d',%d,%s,%lf)", machine, machine, x, age, job, salary);	
+}
+
+void generateDELETE(char *machine, char *delete, int x){
+	sprintf(delete, "%s: DELETE FROM name WHERE name='%s%d'", machine, machine, x);
 }
 
 void printSelect(double time, char *answer, int op){
@@ -76,6 +102,7 @@ double timeCalculation(struct timeval new,struct timeval old){
 int
 main (int argc, char *argv[])
 {
+	int i = 0, j = 0, k = 0;
 	char *host;
 
 	if (argc < 2) {
@@ -94,10 +121,9 @@ main (int argc, char *argv[])
 
 	char *myMachine = getenv("HOSTNAME");
 
-	int i=0;
-	for(i=0;i<100;i++ ){
-		generateINSERT(myMachine, insert[i],i);
-		generateDELETE(myMachine, delete[i],i);
+	for(i = 0; i < 100; i++){
+		generateINSERT(myMachine, insert[i], 20 + i%40, i);
+		generateDELETE(myMachine, delete[i], i);
 	}
 	
 	sprintf(select, "%s: %s", myMachine, SELECT_ALL);
@@ -115,66 +141,75 @@ main (int argc, char *argv[])
 			
 	double times[NUM_MAX_OPERATIONS];
 	struct timeval old, new;
-	
+
 	printf("            -----------------------------------                  \n");
+	
+	i = 0;
+	j = 0;
+	k = 0;
+
 	while( iterations < NUM_MAX_OPERATIONS) {	
 
 		operation = rand()%50;
 
 		switch(operation){
 			case 0:
-				strcpy(query,insert[indexINSERT]);
-				indexINSERT ++;
-				indexINSERT %=100;
-				
-				gettimeofday(&old,NULL);	
-				retval_1 = query_1(&query, &result, clnt);
-				gettimeofday(&new,NULL);
-				
-				if (retval_1 != RPC_SUCCESS) {
-					clnt_perror (clnt, "call failed");
-				}
-				else
-					printSelect(timeCalculation(new,old),result,0);
+				for (i = 0; i < 100; i++) {
+					strcpy(query,insert[indexINSERT]);
+					indexINSERT ++;
+					indexINSERT %=100;
+					
+					gettimeofday(&old,NULL);	
+					retval_1 = query_1(&query, &result, clnt);
+					gettimeofday(&new,NULL);
+					
+					if (retval_1 != RPC_SUCCESS) {
+						clnt_perror (clnt, "call failed");
+					}
+					else
+						printSelect(timeCalculation(new,old),result,0);
 
-				printf("            -----------------------------------                  \n");
-				iterations++;
+					printf("            -----------------------------------                  \n");
+					iterations++;
+				}
 				break;
 			case 1:
-				strcpy(query,select);
+				for (j = 0; j < 100; j++) {
+					strcpy(query,select);
+					gettimeofday(&old,NULL);	
+					retval_1 = query_1(&query, &result, clnt);
+					gettimeofday(&new,NULL);
+		
+					if (retval_1 != RPC_SUCCESS) {
+						clnt_perror (clnt, "call failed");
+					}
+					else
+						printSelect(timeCalculation(new,old),result,1);
 
-	
-				gettimeofday(&old,NULL);	
-				retval_1 = query_1(&query, &result, clnt);
-				gettimeofday(&new,NULL);
-	
-				if (retval_1 != RPC_SUCCESS) {
-					clnt_perror (clnt, "call failed");
+					printf("            -----------------------------------                  \n");
+					iterations++;
 				}
-				else
-					printSelect(timeCalculation(new,old),result,1);
-
-				printf("            -----------------------------------                  \n");
-				iterations++;
 				break;
 			case 2:
-				strcpy(query,delete[indexDELETE]);
-				
-				indexDELETE ++;
-				indexDELETE %=100;
+				for (k = 0; k < 100; k++) {
+					strcpy(query,delete[indexDELETE]);
+					
+					indexDELETE ++;
+					indexDELETE %=100;
 
-				gettimeofday(&old,NULL);	
-				retval_1 = query_1(&query, &result, clnt);
-				gettimeofday(&new,NULL);
-	
-				if (retval_1 != RPC_SUCCESS) {
-					clnt_perror (clnt, "call failed");
+					gettimeofday(&old,NULL);	
+					retval_1 = query_1(&query, &result, clnt);
+					gettimeofday(&new,NULL);
+		
+					if (retval_1 != RPC_SUCCESS) {
+						clnt_perror (clnt, "call failed");
+					}
+					else
+						printSelect(timeCalculation(new,old),result,2);
+					
+					printf("            -----------------------------------                  \n");
+					iterations++;
 				}
-				else
-					printSelect(timeCalculation(new,old),result,2);
-				
-				printf("            -----------------------------------                  \n");
-				iterations++;
 				break;
 		}
 	
