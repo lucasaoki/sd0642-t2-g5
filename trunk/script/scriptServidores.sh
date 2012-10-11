@@ -16,6 +16,6 @@ ssh -f x-men "./pw2_server >> ${pathServer}serverXMENout.txt "
 
 for	i in `seq 1 12`; do
 	echo Host $i 
-	ssh -f ${hostsClients[$i]} "${binfolder}pw2_client x-men >> ${pathHosts}host${i}out.txt" 
+	ssh -f ${hostsClients[${i}]} "${binfolder}pw2_client x-men >> ${pathHosts}host${i}out.txt" 
 done
 
