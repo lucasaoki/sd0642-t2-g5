@@ -4,6 +4,7 @@
  */
 
 #include "../include/pw2.h"
+#include "../include/svrInclude.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -11,8 +12,6 @@
 #include <memory.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <mysql.h>
-#include <my_global.h>
 
 #ifndef SIG_PF
 #define SIG_PF void(*)(int)
@@ -70,10 +69,8 @@ int initializeMySQL(MYSQL *mysql){
 	if( !mysql_init(mysql) ){
 		return -1;
 	}
-		
-	char *user="gilvolpe";
-	char *passwd="gil*data*base"; 
-	
+ 	
+ 	//if( mysql_real_connect(mysql,"localhost","grupo05sd","06e728","cadastrofunc",0,NULL,0) == NULL){	
  	if( mysql_real_connect(mysql,"localhost","gilvolpe","gil*data*base","testeSD",0,NULL,0) == NULL){
 		return -1;
 	}

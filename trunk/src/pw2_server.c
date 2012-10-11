@@ -5,6 +5,7 @@
  */
 
 #include "../include/pw2.h"
+#include "../include/svrInclude.h"
 
 extern MYSQL mysql;
 
