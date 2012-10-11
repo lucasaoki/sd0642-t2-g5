@@ -4,7 +4,7 @@
  * as a guideline for developing your own functions.
  */
 
-#include "pw2.h"
+#include "../include/pw2.h"
 
 extern MYSQL mysql;
 

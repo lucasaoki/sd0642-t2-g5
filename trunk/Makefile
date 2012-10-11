@@ -3,45 +3,28 @@
 
 # Parameters
 
-CLIENT = pw2_client
-SERVER = pw2_server
+CLIENT = bin/client
+SERVER = bin/server
 
-SOURCES_CLNT.c = 
-SOURCES_CLNT.h = 
-SOURCES_SVC.c = 
-SOURCES_SVC.h = 
-SOURCES.x = pw2.x
+TARGETS_SVC.c = src/pw2_svc.c src/pw2_server.c   
+TARGETS_CLNT.c = src/pw2_clnt.c src/pw2_client.c   
 
-TARGETS_SVC.c = pw2_svc.c pw2_server.c   
-TARGETS_CLNT.c = pw2_clnt.c pw2_client.c   
-TARGETS = pw2.h   pw2_clnt.c pw2_svc.c pw2_client.c pw2_server.c
-
-OBJECTS_CLNT = $(SOURCES_CLNT.c:%.c=%.o) $(TARGETS_CLNT.c:%.c=%.o)
-OBJECTS_SVC = $(SOURCES_SVC.c:%.c=%.o) $(TARGETS_SVC.c:%.c=%.o)
 # Compiler flags 
 
 CPPFLAGS +=
 CFLAGS += -g `mysql_config --libs --cflags` 
 LDLIBS += -lpthread 
- RPCGENFLAGS = 
+INCLUDE_DIR = -I include/
+COMPILER += gcc
 
 # Targets 
-
 all : $(CLIENT) $(SERVER)
 
-#$(TARGETS) : $(SOURCES.x) 
-#	rpcgen $(RPCGENFLAGS) $(SOURCES.x)
-
-$(OBJECTS_CLNT) : $(SOURCES_CLNT.c) $(SOURCES_CLNT.h) $(TARGETS_CLNT.c) 
-
-$(OBJECTS_SVC) : $(SOURCES_SVC.c) $(SOURCES_SVC.h) $(TARGETS_SVC.c) 
-
 $(CLIENT) : $(OBJECTS_CLNT) 
-	$(LINK.c) -o $(CLIENT) $(OBJECTS_CLNT) $(LDLIBS) $(CFLAGS) 
+	$(COMPILER) -o $(CLIENT) $(INCLUDE_DIR) $(TARGETS_CLNT.c) $(LDLIBS) $(CFLAGS) 
 
 $(SERVER) : $(OBJECTS_SVC) 
-	$(LINK.c) -o $(SERVER) $(OBJECTS_SVC) $(LDLIBS) $(CFLAGS)
+	$(COMPILER) -o $(SERVER) $(INCLUDE_DIR) $(TARGETS_SVC.c) $(LDLIBS) $(CFLAGS)
 
- #clean:
-#	 $(RM) core $(TARGETS) $(OBJECTS_CLNT) $(OBJECTS_SVC) $(CLIENT) $(SERVER)
-
+clean:
+	rm bin/client bin/server
