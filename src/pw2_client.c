@@ -26,15 +26,15 @@ pw2_query_prog_1(char *host)
 	}
 }
 
-void generateINSERT(char *machine,char *insert,int age){
-	sprintf(insert,"%s: INSERT INTO name(name,age) VALUES('%s%d',%d)",machine,machine,age,age);	
+void generateINSERT(char *machine, char *insert, int age){
+	sprintf(insert, "%s: INSERT INTO name(name,age) VALUES('%s%d',%d)", machine, machine, age, age);	
 }
 
-void generateDELETE(char *machine,char *delete,int age){
-	sprintf(delete,"%s: DELETE FROM name WHERE name='%s%d'",machine,machine,age);
+void generateDELETE(char *machine, char *delete, int age){
+	sprintf(delete, "%s: DELETE FROM name WHERE name='%s%d'", machine, machine, age);
 }
 
-void printSelect(double time, char *answer,int op){
+void printSelect(double time, char *answer, int op){
 
 	char operation[20];
 
@@ -52,7 +52,7 @@ void printSelect(double time, char *answer,int op){
 	int i = 0;
 	int j;
 
-	printf("\t%14s Time spend: %f\n",operation,time);
+	printf("\t%14s Time spent: %f\n", operation, time);
 	if( op != 1){
 		for(j=0;j<13;j++)
 			putchar(' ');
@@ -96,11 +96,11 @@ main (int argc, char *argv[])
 
 	int i=0;
 	for(i=0;i<100;i++ ){
-		generateINSERT(myMachine,insert[i],i);
-		generateDELETE(myMachine,delete[i],i);
+		generateINSERT(myMachine, insert[i],i);
+		generateDELETE(myMachine, delete[i],i);
 	}
 	
-	sprintf(select,"%s: %s",myMachine,SELECT_ALL);
+	sprintf(select, "%s: %s", myMachine, SELECT_ALL);
 	
 	int iterations = 0;
 	int operation;

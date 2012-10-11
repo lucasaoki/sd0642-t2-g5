@@ -10,11 +10,6 @@
 
 #include <pthread.h>
 
-#include <mysql.h>
-#include <my_global.h>
-
-MYSQL mysql;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
