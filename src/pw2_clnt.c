@@ -4,7 +4,7 @@
  */
 
 #include <memory.h> /* for memset */
-#include "pw2.h"
+#include "../include/pw2.h"
 
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
