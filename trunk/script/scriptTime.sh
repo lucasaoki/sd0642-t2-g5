@@ -11,7 +11,7 @@ commandoCut="cut -d ' ' -f 10"
 
 for i in `seq 1 12`; do
 	for j in `seq 1 3`; do
-		grep ${grepVariable${i}} | ${commandoCut} >> ${pathTime}${grepVariable}Hosts${i}.txt	
+		grep ${grepVariable${i}} | ${commandoCut} >> ${pathTime}host${i}/${grepVariable}Hosts${i}.txt	
 	done	
-	${commandoCut} ${pathHosts}host${i}out.txt >> ${pathTime}timeHosts${i}.txt
+	${commandoCut} ${pathHosts}host${i}out.txt >> ${pathTime}host${i}/timeHosts${i}.txt
 done
