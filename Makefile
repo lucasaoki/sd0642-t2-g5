@@ -12,7 +12,7 @@ TARGETS_CLNT.c = src/pw2_clnt.c src/pw2_client.c
 # Compiler flags 
 
 CPPFLAGS +=
-CFLAGS += -g `mysql_config --libs --cflags` 
+CFLAGS += -g 
 LDLIBS += -lpthread 
 INCLUDE_DIR = -I include/
 COMPILER += gcc
@@ -24,7 +24,7 @@ $(CLIENT) : $(OBJECTS_CLNT)
 	$(COMPILER) -o $(CLIENT) $(INCLUDE_DIR) $(TARGETS_CLNT.c) $(LDLIBS) $(CFLAGS) 
 
 $(SERVER) : $(OBJECTS_SVC) 
-	$(COMPILER) -o $(SERVER) $(INCLUDE_DIR) $(TARGETS_SVC.c) $(LDLIBS) $(CFLAGS)
+	$(COMPILER) -o $(SERVER) $(INCLUDE_DIR) $(TARGETS_SVC.c) $(LDLIBS) $(CFLAGS) `mysql_config --libs --cflags`  
 
 clean:
 	rm bin/client bin/server
