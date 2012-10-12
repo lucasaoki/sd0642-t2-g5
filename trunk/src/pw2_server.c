@@ -9,7 +9,7 @@
 
 extern MYSQL mysql;
 
-#define MAX_ANSWER_SIZE 100
+#define MAX_ANSWER_SIZE 150
 
 bool_t
 query_1_svc(char **argp, char **result, struct svc_req *rqstp)

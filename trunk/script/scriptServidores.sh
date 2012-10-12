@@ -11,8 +11,8 @@ echo do teste.
 
 hostsClients=("0" "ciclope" "wolverine" "magneto" "hulk" "colossus" "tempestade" "demolidor" "noturno" "vampira" "gambit" "elektra" "anjo")
 
-echo Servidor RPC
-ssh -f x-men "./server >> ${pathServer}serverXMENout.txt " 
+#echo Servidor RPC
+#ssh -f x-men "./server >> ${pathServer}serverXMENout.txt " 
 
 for	i in `seq 1 12`; do
 	echo Host $i 
