@@ -71,7 +71,6 @@ int initializeMySQL(MYSQL *mysql){
 	}
  	
  	if( mysql_real_connect(mysql,"localhost","grupo05sd","06e728","grupo05sd",0,NULL,0) == NULL){	
- 	//if( mysql_real_connect(mysql,"localhost","gilvolpe","gil*data*base","testeSD",0,NULL,0) == NULL){
 		return -1;
 	}
 }
