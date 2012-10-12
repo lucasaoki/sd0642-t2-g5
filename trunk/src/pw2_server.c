@@ -32,6 +32,8 @@ query_1_svc(char **argp, char **result, struct svc_req *rqstp)
 	printf("Action in database -> %s\n",*argp);
 	int res = mysql_query(&mysql,*argp+k);			
 	if( res != 0 ){
+
+		printf("Erro %u: %s\n", mysql_errno(&mysql), mysql_error(&mysql));
 	
 		answer = (char *)malloc(sizeof(char)*100);
 		sprintf(answer,"%15s",failure);

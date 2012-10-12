@@ -11,8 +11,9 @@
 
 CLIENT *clnt;
 
-#define SELECT_ALL "SELECT * FROM name"
+#define SELECT_ALL "SELECT * FROM cadastrofunc"
 #define NUM_MAX_OPERATIONS 300
+#define MAX_SINGLE_OPERATION 100
 
 void
 pw2_query_prog_1(char *host)
@@ -53,11 +54,11 @@ void generateINSERT(char *machine, char *insert, int age, int x){
 	int salary;
 	char job[20];
 	setJob(job, &salary, x);
-	sprintf(insert, "%s: INSERT INTO cadastrofunc(name,age,cargo,salario) VALUES('%s%d',%d,'%s',%d)\0", machine, machine, x, age, job, salary);	
+	sprintf(insert, "%s: INSERT INTO cadastrofunc(nome,idade,cargo,salario) VALUES('%s%d',%d,'%s',%d)\0", machine, machine, x, age, job, salary);	
 }
 
 void generateDELETE(char *machine, char *delete, int x){
-	sprintf(delete, "%s: DELETE FROM cadastrofunc WHERE name='%s%d'\0", machine, machine, x);
+	sprintf(delete, "%s: DELETE FROM cadastrofunc WHERE nome='%s%d'\0", machine, machine, x);
 }
 
 void printSelect(double time, char *answer, int op){
@@ -115,13 +116,13 @@ main (int argc, char *argv[])
 	
 	srand(time(NULL));
 
-	char insert[100][100];
-	char delete[100][100];
-	char select[100];
+	char insert[MAX_SINGLE_OPERATION][150];
+	char delete[MAX_SINGLE_OPERATION][150];
+	char select[MAX_SINGLE_OPERATION];
 
 	char *myMachine = getenv("HOSTNAME");
 
-	for(i = 0; i < 100; i++){
+	for(i = 0; i < MAX_SINGLE_OPERATION; i++){
 		generateINSERT(myMachine, insert[i], 20 + i%40, i);
 		generateDELETE(myMachine, delete[i], i);
 	}
@@ -132,8 +133,8 @@ main (int argc, char *argv[])
 	int operation;
 	enum clnt_stat retval_1;
 
-	char *result = (char *)malloc(sizeof(char)*1000000);
-	char *query = (char *)malloc(sizeof(char)*10000) ;
+	char *result = (char *)malloc(sizeof(char)*100000);
+	char *query = (char *)malloc(sizeof(char)*150) ;
 	
 		
 	int indexINSERT = rand()%80;
@@ -154,10 +155,10 @@ main (int argc, char *argv[])
 
 		switch(operation){
 			case 0:
-				for (i = 0; i < 100; i++) {
+				for (; i < MAX_SINGLE_OPERATION; i++) {
 					strcpy(query,insert[indexINSERT]);
 					indexINSERT ++;
-					indexINSERT %=100;
+					indexINSERT %=MAX_SINGLE_OPERATION;
 					
 					gettimeofday(&old,NULL);	
 					retval_1 = query_1(&query, &result, clnt);
@@ -174,7 +175,7 @@ main (int argc, char *argv[])
 				}
 				break;
 			case 1:
-				for (j = 0; j < 100; j++) {
+				for (; j < MAX_SINGLE_OPERATION; j++) {
 					strcpy(query,select);
 					gettimeofday(&old,NULL);	
 					retval_1 = query_1(&query, &result, clnt);
@@ -191,11 +192,11 @@ main (int argc, char *argv[])
 				}
 				break;
 			case 2:
-				for (k = 0; k < 100; k++) {
+				for (; k < MAX_SINGLE_OPERATION; k++) {
 					strcpy(query,delete[indexDELETE]);
 					
 					indexDELETE ++;
-					indexDELETE %=100;
+					indexDELETE %=MAX_SINGLE_OPERATION;
 
 					gettimeofday(&old,NULL);	
 					retval_1 = query_1(&query, &result, clnt);
