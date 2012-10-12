@@ -20,7 +20,7 @@ pw2_query_prog_1(char *host)
 {
 	enum clnt_stat retval_1;
 
-	clnt = clnt_create (host, PW2_QUERY_PROG, QUERY, "udp");
+	clnt = clnt_create (host, PW2_QUERY_PROG, QUERY, "tcp");
 	if (clnt == NULL) {
 		clnt_pcreateerror (host);
 		exit (1);
@@ -151,7 +151,7 @@ main (int argc, char *argv[])
 
 	while( iterations < NUM_MAX_OPERATIONS) {	
 
-		operation = 1;
+		operation = rand()%50;
 
 		switch(operation){
 			case 0:
@@ -177,7 +177,7 @@ main (int argc, char *argv[])
 			case 1:
 				strcpy(query,select);
 				
-				for (; j < 3*MAX_SINGLE_OPERATION; j++) {
+				for (; j < MAX_SINGLE_OPERATION; j++) {
 					
 					gettimeofday(&old,NULL);	
 					retval_1 = query_1(&query, &result, clnt);
