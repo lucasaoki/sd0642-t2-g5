@@ -30,22 +30,22 @@ pw2_query_prog_1(char *host)
 void setJob(char *job, int *salary, int x) {
 	if (x < 30)
 	{
-		strcpy(job, "Faxineiro");
+		strcpy(job, "Faxineiro\0");
 		*salary = 800;
 	}
 	else if (x < 70)
 	{
-		strcpy(job, "Tecnico");
+		strcpy(job, "Tecnico\0");
 		*salary = 1800;
 		
 	}
 	else if (x < 95)
 	{
-		strcpy(job, "Engenheiro");
+		strcpy(job, "Engenheiro\0");
 		*salary = 6000;
 	}
 	else {
-		strcpy(job, "Gerente");
+		strcpy(job, "Gerente\0");
 		*salary = 9000;
 	}
 }
@@ -127,13 +127,13 @@ main (int argc, char *argv[])
 		generateDELETE(myMachine, delete[i], i);
 	}
 	
-	sprintf(select, "%s: %s", myMachine, SELECT_ALL);
+	sprintf(select, "%s: %s\0", myMachine, SELECT_ALL);
 	
 	int iterations = 0;
 	int operation;
 	enum clnt_stat retval_1;
 
-	char *result = (char *)malloc(sizeof(char)*100000);
+	char *result = (char *)malloc(sizeof(char)*1000000);
 	char *query = (char *)malloc(sizeof(char)*150) ;
 	
 		
@@ -151,7 +151,7 @@ main (int argc, char *argv[])
 
 	while( iterations < NUM_MAX_OPERATIONS) {	
 
-		operation = rand()%50;
+		operation = 1;
 
 		switch(operation){
 			case 0:
@@ -175,8 +175,10 @@ main (int argc, char *argv[])
 				}
 				break;
 			case 1:
-				for (; j < MAX_SINGLE_OPERATION; j++) {
-					strcpy(query,select);
+				strcpy(query,select);
+				
+				for (; j < 3*MAX_SINGLE_OPERATION; j++) {
+					
 					gettimeofday(&old,NULL);	
 					retval_1 = query_1(&query, &result, clnt);
 					gettimeofday(&new,NULL);
@@ -214,7 +216,6 @@ main (int argc, char *argv[])
 				break;
 		}
 	
-		usleep(1000);
 	}
 
 	free(result);
